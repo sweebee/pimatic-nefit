@@ -71,7 +71,7 @@ module.exports = (env) ->
     changeModeTo: (mode) ->
       if mode == "boost"
         env.logger.info('Boost is not supported')
-        mode = "manu"
+        return
 
       @_setMode(mode)
       if mode == "manu"
