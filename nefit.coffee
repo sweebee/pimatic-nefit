@@ -126,7 +126,7 @@ module.exports = (env) ->
         env.logger.error(e)
       )
 
-      @requestTimeout = setTimeout(@requestData, 10000)
+      @requestTimeout = setTimeout(@requestData, @config.Polling)
 
     destroy: ->
       @client.end()
