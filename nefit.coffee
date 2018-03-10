@@ -90,8 +90,6 @@ module.exports = (env) ->
 
     _setTemperature: (temperature) ->
       if temperature is @_temperature then return
-      console.log(temperature)
-
       @_temperature = temperature
       @emit "temperature", @_temperature
 
