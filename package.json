@@ -1,0 +1,30 @@
+{
+  "name": "pimatic-nefit",
+  "description": "Control the Nefit (Bosch) thermostat",
+  "author": "Wiebe Nieuwenhuis <info@wiebenieuwenhuis.nl> (http://wiebenieuwenhuis.nl)",
+  "main": "nefit",
+  "icon": "icon.png",
+  "files": [
+    "nefit.coffee",
+    "README.md",
+    "nefit-config-schema.coffee",
+    "device-config-schema.coffee"
+  ],
+  "version": "0.1.0",
+  "homepage": "http://wiebenieuwenhuis.nl",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sweebee/pimatic-nefit.git"
+  },
+  "configSchema": "nefit-config-schema.coffee",
+  "peerDependencies": {
+    "pimatic": "0.9.*"
+  },
+  "engines": {
+    "node": ">4.0.x",
+    "npm": ">1.1.x"
+  },
+  "dependencies": {
+    "nefit-easy-commands": "^1.8.1"
+  }
+}
