@@ -11,7 +11,7 @@
     "device-config-schema.coffee",
     "icon.png"
   ],
-  "version": "0.1.5",
+  "version": "0.1.6",
   "homepage": "http://wiebenieuwenhuis.nl",
   "repository": {
     "type": "git",
