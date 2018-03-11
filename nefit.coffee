@@ -50,7 +50,11 @@ module.exports = (env) ->
         password     : @config.Password,
       })
 
-      @requestData()
+      @client.connect().then( () =>
+        @requestData()
+      ).catch( (e) =>
+        env.logger.error(e)
+      )
 
       super()
 
@@ -58,14 +62,13 @@ module.exports = (env) ->
 
     changeTemperatureTo: (temperatureSetpoint) ->
       @_setSetpoint(temperatureSetpoint)
-      @client.connect().then( () =>
-        return @client.setTemperature(temperatureSetpoint)
-      ).then( (result) =>
-        return Promise.resolve()
+      @client.setTemperature(temperatureSetpoint).then( (result) =>
         @requestData()
+        return Promise.resolve()
       ).catch( (e) =>
-        return Promise.resolve()
+        env.logger.error(e)
         @requestData()
+        return Promise.resolve()
       )
 
     changeModeTo: (mode) ->
@@ -78,12 +81,11 @@ module.exports = (env) ->
         userMode = "manual"
       else
         userMode = "clock"
-      @client.connect().then( () =>
-        return @client.setUserMode(userMode)
-      ).then( (status) =>
+      @client.setUserMode(userMode).then( (status) =>
         @requestData()
         return Promise.resolve()
       ).catch( (e) =>
+        env.logger.error(e)
         @requestData()
         return Promise.resolve()
       )
@@ -98,9 +100,7 @@ module.exports = (env) ->
 
       clearTimeout @requestTimeout if @requestTimeout?
 
-      @client.connect().then( () =>
-        return @client.status()
-      ).then( (status) =>
+      @client.status().then( (status) =>
         #env.logger.debug(status)
 
         # get the mode
