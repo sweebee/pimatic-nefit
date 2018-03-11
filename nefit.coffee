@@ -34,6 +34,7 @@ module.exports = (env) ->
       @_valve = false
       @_mode = lastState?.mode?.value or "manu"
       @_temperature = lastState?.temperature?.value
+      @_pressure = lastState?.pressure?.value
 
       @addAttribute('temperature', {
         label: "House temperature"
@@ -43,6 +44,15 @@ module.exports = (env) ->
         unit: "C"
       })
       @['temperature'] = ()-> Promise.resolve(@_temperature)
+
+      @addAttribute('pressure', {
+        label: "Pressure"
+        description: "Pressure of the heater",
+        type: "number"
+        displaySparkline: false
+        unit: "bar"
+      })
+      @['pressure'] = ()-> Promise.resolve(@_pressure)
 
       @client = NefitEasyClient({
         serialNumber : @config.SerialNumber,
@@ -57,8 +67,6 @@ module.exports = (env) ->
       )
 
       super()
-
-    getTemperature: () -> Promise.resolve(@_temperature)
 
     changeTemperatureTo: (temperatureSetpoint) ->
       @_setSetpoint(temperatureSetpoint)
@@ -90,18 +98,13 @@ module.exports = (env) ->
         return Promise.resolve()
       )
 
-    _setTemperature: (temperature) ->
-      if temperature is @_temperature then return
-      @_temperature = temperature
-      @emit "temperature", @_temperature
-
     requestData: () =>
       env.logger.debug("polling thermostat")
 
       clearTimeout @requestTimeout if @requestTimeout?
 
       @client.status().then( (status) =>
-        #env.logger.debug(status)
+        env.logger.debug(status)
 
         # get the mode
         if status["user mode"] == "clock"
@@ -120,8 +123,21 @@ module.exports = (env) ->
           @_setValve(100)
 
         # get house temperature
-        @_setTemperature(parseFloat(status["in house temp"]))
+        temperature = parseFloat(status["in house temp"])
+        unless temperature is @_temperature
+          @_temperature = temperature
+          @emit "temperature", @_temperature
 
+      ).catch( (e) =>
+        env.logger.error(e)
+      )
+
+      @client.pressure().then( (result) =>
+        # get the pressure
+        pressure = parseFloat(result.pressure)
+        unless pressure is @_pressure
+          @_pressure = pressure
+          @emit "pressure", @_pressure
       ).catch( (e) =>
         env.logger.error(e)
       )
@@ -132,6 +148,9 @@ module.exports = (env) ->
       @client.end()
       clearTimeout @requestTimeout if @requestTimeout?
       super()
+
+    getTemperature: () -> Promise.resolve(@_temperature)
+    getPressure: () -> Promise.resolve(@_temperature)
 
   nefit = new nefit
 
