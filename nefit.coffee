@@ -108,7 +108,7 @@ module.exports = (env) ->
 
         # get the mode
         if status["user mode"] == "clock"
-          mode = "clock"
+          mode = "auto"
         else
           mode = "manu"
         @_setMode(mode)
