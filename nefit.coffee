@@ -150,7 +150,7 @@ module.exports = (env) ->
       super()
 
     getTemperature: () -> Promise.resolve(@_temperature)
-    getPressure: () -> Promise.resolve(@_temperature)
+    getPressure: () -> Promise.resolve(@_pressure)
 
   nefit = new nefit
 
