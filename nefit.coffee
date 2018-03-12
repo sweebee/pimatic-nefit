@@ -8,6 +8,16 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
 
+      # wait till all plugins are loaded
+      @framework.on "after init", =>
+        # Check if the mobile-frontend was loaded and get a instance
+        mobileFrontend = @framework.pluginManager.getPlugin 'mobile-frontend'
+        if mobileFrontend?
+          mobileFrontend.registerAssetFile 'js', "pimatic-nefit/app/nefit-page.coffee"
+          mobileFrontend.registerAssetFile 'html', "pimatic-nefit/app/nefit-template.jade"
+        else
+          env.logger.warn "your plugin could not find the mobile-frontend. No gui will be available"
+
       #Register devices
       deviceConfigDef = require("./device-config-schema.coffee")
 
@@ -26,11 +36,12 @@ module.exports = (env) ->
 
   class NefitThermostat extends env.devices.HeatingThermostat
 
+    template: "nefit"
+
     constructor: (@config, lastState) ->
       @id = @config.id
       @name = @config.name
       @_temperatureSetpoint = lastState?.temperatureSetpoint?.value or 20
-      @_synced = true
       @_valve = false
       @_mode = lastState?.mode?.value or "manu"
       @_temperature = lastState?.temperature?.value
@@ -47,7 +58,7 @@ module.exports = (env) ->
 
       @addAttribute('pressure', {
         label: "Pressure"
-        description: "Pressure of the heater",
+        description: "Pressure of the water",
         type: "number"
         displaySparkline: false
         unit: "bar"

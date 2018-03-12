@@ -9,7 +9,8 @@
     "README.md",
     "nefit-config-schema.coffee",
     "device-config-schema.coffee",
-    "icon.png"
+    "icon.png",
+    "app"
   ],
   "version": "0.1.6",
   "homepage": "http://wiebenieuwenhuis.nl",
