@@ -27,8 +27,8 @@ $(document).on( "templateinit", (event) ->
     afterRender: (elements) ->
       super(elements)
       # find the buttons
-      @autoButton = $(elements).find('[name=autoButton]')
-      @manuButton = $(elements).find('[name=manuButton]')
+      @clockButton = $(elements).find('[name=clockButton]')
+      @manualButton = $(elements).find('[name=manualButton]')
       @boostButton = $(elements).find('[name=boostButton]')
       @ecoButton = $(elements).find('[name=ecoButton]')
       @comfyButton = $(elements).find('[name=comfyButton]')
@@ -47,9 +47,8 @@ $(document).on( "templateinit", (event) ->
       return
 
 # define the available actions for the template
-    modeAuto: -> @changeModeTo "auto"
-    modeManu: -> @changeModeTo "manu"
-    modeBoost: -> @changeModeTo "boost"
+    modeClock: -> @changeModeTo "clock"
+    modeManual: -> @changeModeTo "manual"
     modeEco: -> @changeTemperatureTo "#{@device.config.ecoTemp}"
     modeComfy: -> @changeTemperatureTo "#{@device.config.comfyTemp}"
     modeVac: -> @changeTemperatureTo "#{@device.config.vacTemp}"
@@ -58,20 +57,12 @@ $(document).on( "templateinit", (event) ->
     updateButtons: ->
       modeAttr = @getAttribute('mode')?.value()
       switch modeAttr
-        when 'auto'
-          @manuButton.removeClass('ui-btn-active')
-          @boostButton.removeClass('ui-btn-active')
-          @autoButton.addClass('ui-btn-active')
-        when 'manu'
-          @manuButton.addClass('ui-btn-active')
-          @boostButton.removeClass('ui-btn-active')
-          @autoButton.removeClass('ui-btn-active')
-        when 'boost'
-          @manuButton.removeClass('ui-btn-active')
-          @boostButton.addClass('ui-btn-active')
-          @ecoButton.removeClass('ui-btn-active')
-          @comfyButton.removeClass('ui-btn-active')
-          @autoButton.removeClass('ui-btn-active')
+        when 'clock'
+          @manualButton.removeClass('ui-btn-active')
+          @clockButton.addClass('ui-btn-active')
+        when 'manual'
+          @manualButton.addClass('ui-btn-active')
+          @clockButton.removeClass('ui-btn-active')
       return
 
     updatePreTemperature: ->

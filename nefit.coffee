@@ -14,6 +14,7 @@ module.exports = (env) ->
         mobileFrontend = @framework.pluginManager.getPlugin 'mobile-frontend'
         if mobileFrontend?
           mobileFrontend.registerAssetFile 'js', "pimatic-nefit/app/nefit-page.coffee"
+          mobileFrontend.registerAssetFile 'css', "pimatic-nefit/app/nefit-template.css"
           mobileFrontend.registerAssetFile 'html', "pimatic-nefit/app/nefit-template.jade"
         else
           env.logger.warn "your plugin could not find the mobile-frontend. No gui will be available"
@@ -43,7 +44,7 @@ module.exports = (env) ->
       @name = @config.name
       @_temperatureSetpoint = lastState?.temperatureSetpoint?.value or 20
       @_valve = false
-      @_mode = lastState?.mode?.value or "manu"
+      @_mode = lastState?.mode?.value or "manual"
       @_temperature = lastState?.temperature?.value
       @_pressure = lastState?.pressure?.value
 
@@ -96,11 +97,7 @@ module.exports = (env) ->
         return
 
       @_setMode(mode)
-      if mode == "manu"
-        userMode = "manual"
-      else
-        userMode = "clock"
-      @client.setUserMode(userMode).then( (status) =>
+      @client.setUserMode(mode).then( (status) =>
         @requestData()
         return Promise.resolve()
       ).catch( (e) =>
@@ -118,11 +115,7 @@ module.exports = (env) ->
         env.logger.debug(status)
 
         # get the mode
-        if status["user mode"] == "clock"
-          mode = "auto"
-        else
-          mode = "manu"
-        @_setMode(mode)
+        @_setMode(status["user mode"])
 
         # get temperature setpoint of thermostat
         @_setSetpoint(parseFloat(status["temp setpoint"]))
