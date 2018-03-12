@@ -53,7 +53,7 @@ module.exports = (env) ->
         description: "House temperature",
         type: "number"
         displaySparkline: false
-        unit: "C"
+        unit: "°C"
       })
       @['temperature'] = ()-> Promise.resolve(@_temperature)
 
