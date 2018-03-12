@@ -92,10 +92,6 @@ module.exports = (env) ->
       )
 
     changeModeTo: (mode) ->
-      if mode == "boost"
-        env.logger.info('Boost is not supported')
-        return
-
       @_setMode(mode)
       @client.setUserMode(mode).then( (status) =>
         @requestData()
