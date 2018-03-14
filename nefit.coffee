@@ -81,24 +81,24 @@ module.exports = (env) ->
       super()
 
     changeTemperatureTo: (temperatureSetpoint) ->
+      clearTimeout @requestTimeout if @requestTimeout?
+      @requestTimeout = setTimeout(@requestData, @config.Polling)
       @_setSetpoint(temperatureSetpoint)
       @client.setTemperature(temperatureSetpoint).then( (result) =>
-        @requestData()
         return Promise.resolve()
       ).catch( (e) =>
         env.logger.error(e)
-        @requestData()
         return Promise.resolve()
       )
 
     changeModeTo: (mode) ->
       @_setMode(mode)
+      clearTimeout @requestTimeout if @requestTimeout?
+      @requestTimeout = setTimeout(@requestData, @config.Polling)
       @client.setUserMode(mode).then( (status) =>
-        @requestData()
         return Promise.resolve()
       ).catch( (e) =>
         env.logger.error(e)
-        @requestData()
         return Promise.resolve()
       )
 
