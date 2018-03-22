@@ -1,7 +1,6 @@
 module.exports = (env) ->
 
   Promise = env.require 'bluebird'
-  assert = env.require 'cassert'
   NefitEasyClient = require 'nefit-easy-commands'
 
   class nefit extends env.plugins.Plugin
@@ -75,7 +74,7 @@ module.exports = (env) ->
       @client.connect().then( () =>
         @requestData()
       ).catch( (e) =>
-        env.logger.error(e)
+        env.logger.debug(e)
       )
 
       super()
@@ -87,7 +86,7 @@ module.exports = (env) ->
       @client.setTemperature(temperatureSetpoint).then( (result) =>
         return Promise.resolve()
       ).catch( (e) =>
-        env.logger.error(e)
+        env.logger.debug(e)
         return Promise.resolve()
       )
 
@@ -98,7 +97,7 @@ module.exports = (env) ->
       @client.setUserMode(mode).then( (status) =>
         return Promise.resolve()
       ).catch( (e) =>
-        env.logger.error(e)
+        env.logger.debug(e)
         return Promise.resolve()
       )
 
@@ -129,7 +128,7 @@ module.exports = (env) ->
           @emit "temperature", @_temperature
 
       ).catch( (e) =>
-        env.logger.error(e)
+        env.logger.debug(e)
       )
 
       @client.pressure().then( (result) =>
@@ -139,7 +138,7 @@ module.exports = (env) ->
           @_pressure = pressure
           @emit "pressure", @_pressure
       ).catch( (e) =>
-        env.logger.error(e)
+        env.logger.debug(e)
       )
 
       @requestTimeout = setTimeout(@requestData, @config.Polling)
