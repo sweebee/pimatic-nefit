@@ -133,9 +133,9 @@ module.exports = (env) ->
 
         # Get the heating status
         if status['boiler indicator'] == 'off'
-          @_setValve(true)
-        else
           @_setValve(false)
+        else
+          @_setValve(true)
 
         # get house temperature
         temperature = parseFloat(status["in house temp"])
