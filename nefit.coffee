@@ -38,6 +38,22 @@ module.exports = (env) ->
 
     template: "nefit"
 
+    attributes:
+      temperatureSetpoint:
+        label: "Temperature Setpoint"
+        description: "The temp that should be set"
+        type: "number"
+        discrete: true
+        unit: "°C"
+      valve:
+        description: "Position of the valve"
+        type: "boolean"
+        discrete: true
+      mode:
+        description: "The current mode"
+        type: "string"
+        enum: ["clock",'manual']
+
     constructor: (@config, lastState) ->
       @id = @config.id
       @name = @config.name
@@ -117,9 +133,9 @@ module.exports = (env) ->
 
         # Get the heating status
         if status['boiler indicator'] == 'off'
-          @_setValve(0)
+          @_setValve(true)
         else
-          @_setValve(100)
+          @_setValve(false)
 
         # get house temperature
         temperature = parseFloat(status["in house temp"])
