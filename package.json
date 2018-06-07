@@ -1,7 +1,7 @@
 {
   "name": "pimatic-nefit",
   "description": "Control the Nefit (Bosch) thermostat",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "author": "Wiebe Nieuwenhuis <info@wiebenieuwenhuis.nl> (http://wiebenieuwenhuis.nl)",
   "main": "nefit",
   "icon": "icon.png",
@@ -27,6 +27,6 @@
     "npm": ">1.1.x"
   },
   "dependencies": {
-    "nefit-easy-commands": "^1.8.1"
+    "nefit-easy-commands": "^2.0.0"
   }
 }
